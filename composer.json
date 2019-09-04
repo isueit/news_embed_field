@@ -1,0 +1,5 @@
+{
+  "name": "isueit/news_embed_field",
+  "type": "drupal-custom-module",
+  "description": "Module to create a field type to embed news articles into a node"
+}

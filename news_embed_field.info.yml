@@ -1,0 +1,8 @@
+name: News Embed Field
+type: module
+description: 'Provide a field type to embed a news article within a node'
+package: ISUEO
+core: 8.x
+dependencies:
+  - drupal:field
+  - drupal:system
