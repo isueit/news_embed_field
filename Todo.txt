@@ -1,0 +1,5 @@
+Todo:
+* Remove Author info at the bottom
+* Be able to pull in other formats of pages
+* Canonical links
+* Theming/styling?
