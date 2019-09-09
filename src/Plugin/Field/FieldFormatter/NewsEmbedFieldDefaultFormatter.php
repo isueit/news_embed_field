@@ -97,8 +97,10 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
       $dom = $this->load_html($html);
       if($dom) {
         $articles = $dom->getElementsByTagName('article');
-        if (count($articles)) {
+        if (count($articles) == 2) {
           $results = $articles[0]->ownerDocument->saveXML($articles[0]);
+        } elseif (count($articles) == 3) {
+          $results = $articles[0]->ownerDocument->saveXML($articles[1]);
         }
       }
     }
