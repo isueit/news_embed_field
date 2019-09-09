@@ -31,6 +31,13 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = array();
+
+    // Do NOT cache a page with this block on it.
+    \Drupal::service('page_cache_kill_switch')->trigger();
+    $elements['#cache']['max-age'] = 0;
+    $elements['#cache']['contexts'] = [];
+    $elements['#cache']['tags'] = [];
+
     foreach ($items as $delta => $item) {
       // Render output
       if (filter_var($item->url, FILTER_VALIDATE_URL)) {
