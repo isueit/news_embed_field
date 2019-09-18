@@ -1,0 +1,7 @@
+# Ignore system or IDE generated files
+.idea
+.DS_STORE
+*.DS_STORE
+
+# Ignore vendor folder
+vendor
