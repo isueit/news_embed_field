@@ -1,0 +1,28 @@
+<?php
+
+use Drupal\news_embed_field\Plugin\Field\FieldFormatter;
+
+
+/**
+ * @file
+ * The news_embed_field module.
+ */
+
+
+/**
+ * Implements hook_page_attachments
+ * Works for general pages
+ */
+function news_embed_field_page_attachments_alter(array &$attachments) {
+  foreach ($attachments['#attached']['html_head'] as $key => $head) {
+    if ($head[0]['#tag'] == 'link' && $head[0]['#attributes']['rel'] == 'canonical') {
+      $canonical = Drupal\news_embed_field\Plugin\Field\FieldFormatter\NewsEmbedFieldDefaultFormatter::$canonicalURL;
+      if (!empty($canonical)) {
+        $attachments['#attached']['html_head'][$key][0]['#attributes']['href'] = $canonical;
+      }
+
+      break;
+    }
+  }
+}
+

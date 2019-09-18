@@ -9,7 +9,6 @@ namespace Drupal\news_embed_field\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\news_embed_field\Controller\Helpers;
 use DOMDocument;
 
 
@@ -25,6 +24,8 @@ use DOMDocument;
  * )
  */
 class NewsEmbedFieldDefaultFormatter extends FormatterBase {
+
+  public static $canonicalURL = '';
 
   /**
    * {@inheritdoc}
@@ -48,7 +49,7 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
             $output .= '<div class="local_info">' . $item->local_info . '</div>' . PHP_EOL;
           }
           $output .= '<div class="embedded_article">' . $embeddedPage['article'] . '</div>' . PHP_EOL;
-          $output .= '<div class="embedded_article">' . htmlentities($embeddedPage['article']) . '</div>' . PHP_EOL;
+          //$output .= '<div class="embedded_article">' . htmlentities($embeddedPage['article']) . '</div>' . PHP_EOL;
         }
         $elements[$delta] = array('#markup' => $output);
       }
@@ -74,6 +75,8 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
     $results['html'] = $html;
     $results['canonical'] = $this->getCanonicalURL($html, $results['url']);
     $results['article'] = $this->getArticle($html, $results['url']);
+
+    self::$canonicalURL = $results['canonical'];
 
     return $results;
   }
@@ -105,11 +108,25 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
       if($dom) {
         $articles = $dom->getElementsByTagName('article');
         if (count($articles)) {
-          if (count($articles) == 3) {
+
+          // Check if page already has a div with class of embedded_article
+          $divs = $dom->getElementsByTagName('div');
+          $hasEmbeddedArticle = FALSE;
+          foreach($divs as $div) {
+            $classes = $div->getAttribute('class');
+            if ($classes == 'embedded_article') {
+              $hasEmbeddedArticle = TRUE;
+              break;
+            }
+          }
+
+          // It already has an embedded article, grab the second one, otherwise grab the first
+          if (count($articles) > 1 && $hasEmbeddedArticle) {
             $results = $articles[0]->ownerDocument->saveXML($articles[1]);
           } else {
             $results = $articles[0]->ownerDocument->saveXML($articles[0]);
           }
+
         }
       }
     }

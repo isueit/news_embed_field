@@ -34,7 +34,6 @@ class NewsEmbedFieldDefaultWidget extends WidgetBase {
       '#title' => $this->t('Embed News Article'),
       '#attributes' => array(
         'class' => 'briantest',
-        'style' => 'background:pink;',
       ),
       '#open' => FALSE,
     );

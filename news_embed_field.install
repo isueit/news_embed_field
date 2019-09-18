@@ -1,0 +1,10 @@
+<?php
+/**
+ * Implements hook_install to set default variables
+ */
+function news_embed_field_install() {
+  // Set the weight of this module to -10. This should ensure that the hooks for this module
+  // run first. The important thing is they need to run before metatag module hooks.
+  module_set_weight('news_embed_field', -10);
+}
+
