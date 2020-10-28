@@ -9,6 +9,7 @@ namespace Drupal\news_embed_field\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FieldFilteredMarkup;
 use DOMDocument;
 
 
@@ -51,7 +52,14 @@ class NewsEmbedFieldDefaultFormatter extends FormatterBase {
           $output .= '<div class="embedded_article">' . $embeddedPage['article'] . '</div>' . PHP_EOL;
           //$output .= '<div class="embedded_article">' . htmlentities($embeddedPage['article']) . '</div>' . PHP_EOL;
         }
-        $elements[$delta] = array('#markup' => $output);
+        $tags = FieldFilteredMarkup::allowedTags();
+        array_push($tags, 'iframe', 'div', 'h2', 'h3', 'h4', 'h5', 'h5', 'h6', 'footer', 'article');
+        if (preg_match('/<iframe[a-zA-Z0-9\" =\/\._\?\%]+\/>/', $output, $matches, PREG_OFFSET_CAPTURE)) {
+          for ($i=0; $i < count($matches); $i++) {
+            $output = substr_replace($output, "> </iframe>", strlen($matches[$i][0])+$matches[$i][1]-2, 11);
+          }
+        }
+        $elements[$delta] = array('#markup' => $output, '#allowed_tags' => $tags);
       }
     }
     return $elements;
